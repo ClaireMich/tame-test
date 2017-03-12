@@ -3,26 +3,29 @@ exports = typeof window === 'undefined' ? global : window;
 exports.asyncAnswers = {
   async: function(value) {
   	const promise = new Promise(
-    function (resolve, reject) { 
+    function (resolve, reject) {
         resolve(value);
     });
     return promise;
   },
 
   manipulateRemoteData: function(url) {
+    // would solve it like this
+    return $.ajax({url})
+    .then((response) => response.people.map((person) => person.name).sort())
 
   	var data = $.ajax({
 	  url: url
 	});
 	people = [];
-	data.done(function(response){	  
+	data.done(function(response){
 	    for (var i=0; i<response.people.length; i++){
 	      people.push(response.people[i].name);
 	    }
 	    people.sort();
 	});
-	var promise2=new Promise((resolve, reject) => { 
-        setTimeout(() => resolve(people), 0); 
+	var promise2=new Promise((resolve, reject) => {
+        setTimeout(() => resolve(people), 0);
     });
     return promise2;
   }
